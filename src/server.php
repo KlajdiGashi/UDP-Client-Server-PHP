@@ -43,12 +43,30 @@ function processRequest($request, $adminPassword, &$clientData, &$clients)
         // perdorimii i switch case per kontrollimin e komandave
         switch ($command) {
             case '/password':
-               
+               if ($password === $adminPassword) {
+                    $response = "Administrator login successful";
+                } else {
+                    $response = "Administrator login failed";
+                }
                 break;
 
             case '/write':
                 // Check if all necessary arguments are provided
-              
+              if (isset($requestParts[2]) && isset($requestParts[3])) {
+                    $fileName = 'output.txt';
+                    $fileContent = $requestParts[3];
+            
+                    // Write to file
+                    if (file_put_contents($fileName, $fileContent, LOCK_EX) !== false) {
+                        $response = "File '$fileName' written successfully.";
+                        // Store the written content in client-specific data
+                        $clientData['writtenContent'] = $fileContent;
+                    } else {
+                        $response = "Failed to write to file '$fileName'.";
+                    }
+                } else {
+                    $response = "Invalid arguments for /write command.";
+                }
                 break;
             
             case '/read':
