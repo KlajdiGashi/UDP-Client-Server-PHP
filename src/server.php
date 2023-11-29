@@ -70,7 +70,15 @@ function processRequest($request, $adminPassword, &$clientData, &$clients)
                 break;
             
             case '/read':
-               
+               // lexon kontekstin brenda file-it
+                $fileName = 'output.txt';
+
+                if (file_exists($fileName)) {
+                    $fileContent = file_get_contents($fileName);
+                    $response = "File content:\n$fileContent";
+                } else {
+                    $response = "File '$fileName' not found. Use '/write' to create and write to a file.";
+                }
                 break;
 
             case '/listen':
