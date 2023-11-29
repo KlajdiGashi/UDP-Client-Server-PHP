@@ -28,3 +28,42 @@ while (true) {
     }
 }
 socket_close($socket);
+
+
+
+function processRequest($request, $adminPassword, &$clientData, &$clients)
+{
+    $response = "Invalid command";
+    $requestParts = explode(" ", $request);
+    
+    if (isset($requestParts[0]) && isset($requestParts[1])) {
+        $command = $requestParts[0];
+        $password = $requestParts[1];
+
+        // perdorimii i switch case per kontrollimin e komandave
+        switch ($command) {
+            case '/password':
+               
+                break;
+
+            case '/write':
+                // Check if all necessary arguments are provided
+              
+                break;
+            
+            case '/read':
+               
+                break;
+
+            case '/listen':
+              
+                break;
+
+            case 'execute':
+                
+                break;
+        }
+    }
+
+    return $response;
+}
