@@ -47,20 +47,25 @@ function processRequest($request, $adminPassword, &$clientData, &$clients)
                 break;
 
             case '/write':
-                // Check if all necessary arguments are provided
-              
+                // Create write funciton
                 break;
             
             case '/read':
+                // Create read function
                
                 break;
 
             case '/listen':
+                // Create listen function
               
                 break;
 
-            case 'execute':
+            case '/execute':
+                // Create execute function
                 
+                break;
+            case '/help':
+                // Create help function 
                 break;
         }
     }
