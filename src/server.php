@@ -80,10 +80,6 @@ function processRequest($request, $adminPassword, &$clientData, &$clients)
                 }
                 break;
 
-            case '/listen':
-              
-                break;
-
             case 'execute':
                 // Kontrollon nese perdoruesi eshte administrator
                 if ($password === $adminPassword) {
@@ -100,6 +96,14 @@ function processRequest($request, $adminPassword, &$clientData, &$clients)
                     $response = "Invalid password for execute command.";
                 }
                 break;
+            
+                case '/listen':
+              
+                break;
+
+               case '/help':
+
+               break;
         }
     }
 
