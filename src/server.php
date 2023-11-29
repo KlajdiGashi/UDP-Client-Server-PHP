@@ -85,7 +85,20 @@ function processRequest($request, $adminPassword, &$clientData, &$clients)
                 break;
 
             case 'execute':
-                
+                // Kontrollon nese perdoruesi eshte administrator
+                if ($password === $adminPassword) {
+                    $fileName = 'output.txt';
+
+                    // Fshin file-n ekzistues
+                    if (file_exists($fileName)) {
+                        unlink($fileName);
+                        $response = "Execution privileges granted for administrators. File '$fileName' deleted.";
+                    } else {
+                        $response = "File '$fileName' not found.";
+                    }
+                } else {
+                    $response = "Invalid password for execute command.";
+                }
                 break;
         }
     }
