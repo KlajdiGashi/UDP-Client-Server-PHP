@@ -1,8 +1,7 @@
 <?php
 // Server config
 $serverHost = '127.0.0.1';
-$serverPort = 12345;
-
+$serverPort = 50001;
 // Password
 $adminPassword = 'passwordis123';
 
