@@ -1,0 +1,13 @@
+password: /password passwordis123
+
+read: /read passwordis123
+
+write: /write passwordis123 Hello, this is content
+
+execute:  /execute passwordis123
+
+listen: /listen passwordis123
+
+help: /help passwordis123
+
+exit: 'exite'
