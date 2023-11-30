@@ -2,7 +2,10 @@
 ### General Info
 A [university](https://fiek.uni-pr.edu) team project organized by ***Computer Networks*** subject.
 
-## Requirements
+#### Requirements
+* Sockets are used for interprocess communication. Interprocess communication is generally based on client-server model. 
+* In this case, client-server are the applications that interact with each other. 
+* Interaction between client and server requires a connection. Socket programming is responsible for establishing that connection between applications to interact.
 
 
 
