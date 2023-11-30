@@ -37,6 +37,8 @@ while (true) {
 socket_close($socket);
 
 
+global $adminLoggedIn;
+
 // funskioni kryesor per procesimin e kerkesave te klientit
 function processRequest($request, $adminPassword, &$clientData, &$clients)
 {
@@ -127,6 +129,7 @@ function processRequest($request, $adminPassword, &$clientData, &$clients)
                break;
         }
     }
+
 
     return $response;
 }
