@@ -18,7 +18,7 @@ while (true) {
     echo "Received from $clientAddress:$clientPort: $buffer\n";
 
     // processimi i te dhenave
-    $response = processRequest($buffer, $adminPassword);
+    $response = processRequest($buffer, $adminPassword, $clients, $clients);
 
     // dergimi i nje response per klientin
     socket_sendto($socket, $response, strlen($response), 0, $clientAddress, $clientPort);
@@ -45,34 +45,42 @@ function processRequest($request, $adminPassword, &$clientData, &$clients)
 
     // Marrja e pjeses tjeter te inputit
     $content = implode(" ", array_slice($parts, 2));
+    if (!empty($command) && !empty($password)) {
+        // Use switch case for command processing
 
-        // perdorimii i switch case per kontrollimin e komandave
+        // perdorimi i switch case per kontrollimin e komandave
         switch ($command) {
             case '/password':
-               if ($password === $adminPassword) {
+                // kontrollimi i password
+                if ($password === $adminPassword) {
+                    $adminLoggedIn = true;
                     $response = "Administrator login successful";
                 } else {
                     $response = "Administrator login failed";
                 }
                 break;
 
-            case '/write':
-
-            if (isset($requestParts[2]) && isset($requestParts[3])) {
-                    $fileName = 'output.txt';
-                    $fileContent = $requestParts[3];
-            
-                    if (file_put_contents($fileName, $fileContent, LOCK_EX) !== false) {
-                        $response = "File '$fileName' written successfully.";
-
-                        $clientData['writtenContent'] = $fileContent;
+                case '/write':
+                    if (isset($parts[2]) && isset($parts[3])) {
+                        $fileName = 'output.txt';
+                        $fileContent = $content;  // Using the extracted content variable
+                                
+                        // Shkrimi ne file
+                        if (file_put_contents($fileName, $fileContent, LOCK_EX) !== false) {
+                            // e bon lock release qe me u mbyll file dhe me marr inputin e sakt
+                            fclose(fopen($fileName, 'a'));
+                            $response = "File '$fileName' written successfully.";
+                            // Ruajtja e flie-it ne daten e klientit
+                            $clientData['writtenContent'] = $fileContent;
+                        } else {
+                            $response = "Failed to write to file '$fileName'.";
+                        }
                     } else {
-                        $response = "Failed to write to file '$fileName'.";
+                        $response = "Invalid arguments for /write command. Usage: /write password content_to_write";
                     }
-                } else {
-                    $response = "Invalid arguments for /write command.";
-                }
-                break;
+                    break;
+
+
             
             case '/read':
                // lexon kontekstin brenda file-it
