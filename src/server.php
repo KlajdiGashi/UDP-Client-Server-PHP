@@ -12,6 +12,8 @@ socket_bind($socket, $serverHost, $serverPort);
 
 echo "UDP Server listening on $serverHost:$serverPort\n";
 
+// Associative array to store client-specific data
+   $clients = [];
 while (true) {
     // Leximi i te dhenave nga klienti
     socket_recvfrom($socket, $buffer, 1024, 0, $clientAddress, $clientPort);
@@ -21,8 +23,13 @@ while (true) {
     $response = processRequest($buffer, $adminPassword, $clients, $clients);
 
     // dergimi i nje response per klientin
-    socket_sendto($socket, $response, strlen($response), 0, $clientAddress, $clientPort);
-
+    if ($clientPort !== null) {
+        socket_sendto($socket, $response, strlen($response), 0, $clientAddress, $clientPort);
+    } else {
+        // Handle the case when $clientPort is null (e.g., log an error, display a message, etc.)
+        echo "Error: Client port is null.\n";
+    }
+    
     if ($buffer === 'exit') {
         break;
     }
