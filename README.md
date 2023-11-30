@@ -14,18 +14,18 @@ Socket programming is responsible for establishing that connection between appli
    7. Send message to the client socket
    8. Close the socket
 
-   * PHP Client
-    1. Set variables such as "host" and "port"
-    2. Create Socket
-    3. Connect to the server
-    4. Write to server socket
-    5. Read the response from the server
-    6. Close the socket.
+  * PHP Client
+  1. Set variables such as "host" and "port"
+  2. Create Socket
+  3. Connect to the server
+  4. Write to server socket
+  5. Read the response from the server
+  6. Close the socket.
 
   * Protocol
        * User Datagram Protocol ([UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol)) is a network protocol that operates at the transport layer of the              Internet Protocol (IP) suite.
        * How does UDP work ?
-         /assets/img/udp.png
+         ![Alt text](/img/udp.PNG)
           
 
 ### Technologies
