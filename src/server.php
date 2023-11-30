@@ -13,14 +13,14 @@ echo "UDP Server listening on $serverHost:$serverPort\n";
 
 // Associative array to store client-specific data
 $clients = [];
-$adminLoggedIn = false;  // Variable to track admin login status
+$loggedInUsers = [];  // Array to track successfully logged-in users
 while (true) {
     // Leximi i te dhenave nga klienti
     socket_recvfrom($socket, $buffer, 1024, 0, $clientAddress, $clientPort);
     echo "Received from $clientAddress:$clientPort: $buffer\n";
 
     // processimi i te dhenave
-    $response = processRequest($buffer, $adminPassword, $clients, $adminLoggedIn);
+    $response = processRequest($buffer, $adminPassword, $clients, $loggedInUsers);
 
     // dergimi i nje response per klientin
     if ($clientPort !== null) {
@@ -37,7 +37,7 @@ while (true) {
 socket_close($socket);
 
 // funskioni kryesor per procesimin e kerkesave te klientit
-function processRequest($request, $adminPassword, &$clientData, &$adminLoggedIn)
+function processRequest($request, $adminPassword, &$clientData, &$loggedInUsers)
 {
     $response = "Invalid command";
     echo "Raw request: $request\n";
@@ -53,24 +53,23 @@ function processRequest($request, $adminPassword, &$clientData, &$adminLoggedIn)
     $content = implode(" ", array_slice($parts, 2));
 
     if (!empty($command) && !empty($password)) {
-        // Check if the user is logged in
-        if ($adminLoggedIn || $command === '/password') {
-            // Use switch case for command processing
+        // Use switch case for command processing
 
-            // perdorimi i switch case per kontrollimin e komandave
-            switch ($command) {
-                case '/password':
-                    // kontrollimi i password
-                    if ($password === $adminPassword) {
-                        $adminLoggedIn = true;
-                        $response = "Administrator login successful";
-                    } else {
-                        $response = "Administrator login failed";
-                    }
-                    break;
+        // perdorimi i switch case per kontrollimin e komandave
+        switch ($command) {
+            case '/password':
+                // kontrollimi i password
+                if ($password === $adminPassword) {
+                    $loggedInUsers[] = $clientData['address']; // Save successfully logged-in user
+                    $response = "Administrator login successful";
+                } else {
+                    $response = "Administrator login failed";
+                }
+                break;
 
-                case '/write':
-                    if (isset($parts[2]) && isset($parts[3])) {
+            case '/write':
+                if (isset($parts[2]) && isset($parts[3])) {
+                    if (in_array($clientData['address'], $loggedInUsers)) {
                         $fileName = 'output.txt';
                         $fileContent = $content;  // Using the extracted content variable
 
@@ -85,62 +84,62 @@ function processRequest($request, $adminPassword, &$clientData, &$adminLoggedIn)
                             $response = "Failed to write to file '$fileName'.";
                         }
                     } else {
-                        $response = "Invalid arguments for /write command. Usage: /write password content_to_write";
+                        $response = "You don't have permission to execute /write. Log in first.";
                     }
-                    break;
+                } else {
+                    $response = "Invalid arguments for /write command. Usage: /write password content_to_write";
+                }
+                break;
 
-                case '/read':
-                    // lexon kontekstin brenda file-it
+            case '/read':
+                // lexon kontekstin brenda file-it
+                $fileName = 'output.txt';
+
+                if (file_exists($fileName)) {
+                    $fileContent = file_get_contents($fileName);
+                    $response = "File content:\n$fileContent";
+                } else {
+                    $response = "File '$fileName' not found. Use '/write' to create and write to a file.";
+                }
+                break;
+
+            case '/execute':
+                // Kontrollon nese perdoruesi eshte administrator
+                if (in_array($clientData['address'], $loggedInUsers) && $password === $adminPassword) {
                     $fileName = 'output.txt';
 
+                    // Fshin file-n ekzistues
                     if (file_exists($fileName)) {
-                        $fileContent = file_get_contents($fileName);
-                        $response = "File content:\n$fileContent";
+                        unlink($fileName);
+                        $response = "Execution privileges granted for administrators. File '$fileName' deleted.";
                     } else {
-                        $response = "File '$fileName' not found. Use '/write' to create and write to a file.";
+                        $response = "File '$fileName' not found.";
                     }
-                    break;
+                } else {
+                    $response = "Invalid password for execute command.";
+                }
+                break;
 
-                case '/execute':
-                    // Kontrollon nese perdoruesi eshte administrator
-                    if ($password === $adminPassword) {
-                        $fileName = 'output.txt';
+            case '/listen':
+                // Implement logic for the /listen command
+                $response = "Listening for incoming data...";
+                // You can add code here to handle incoming data or perform specific actions
+                break;
 
-                        // Fshin file-n ekzistues
-                        if (file_exists($fileName)) {
-                            unlink($fileName);
-                            $response = "Execution privileges granted for administrators. File '$fileName' deleted.";
-                        } else {
-                            $response = "File '$fileName' not found.";
-                        }
-                    } else {
-                        $response = "Invalid password for execute command.";
-                    }
-                    break;
+            case '/help':
+                // Provide help information for the /help command
+                $response = "Available commands:\n";
+                $response .= "/password <password> - Log in as administrator\n";
+                $response .= "/write <password> <content> - Write content to file\n";
+                $response .= "/read - Read content from file\n";
+                $response .= "/execute <password> - Delete the file (admin only)\n";
+                $response .= "/listen - Start listening for incoming data\n";
+                $response .= "/help - Display help information\n";
+                break;
 
-                case '/listen':
-                    // Implement logic for the /listen command
-                    $response = "Listening for incoming data...";
-                    // You can add code here to handle incoming data or perform specific actions
-                    break;
-
-                case '/help':
-                    // Provide help information for the /help command
-                    $response = "Available commands:\n";
-                    $response .= "/password <password> - Log in as administrator\n";
-                    $response .= "/write <password> <content> - Write content to file\n";
-                    $response .= "/read <password> - Read content from file\n";
-                    $response .= "/execute <password> - Delete the file (admin only)\n";
-                    $response .= "/listen - Start listening for incoming data\n";
-                    $response .= "/help - Display help information\n";
-                    break;
-
-                default:
-                    $response = "Unknown command: $command";
-                    break;
-            }
-        } else {
-            $response = "Access denied. Please log in with /password command.";
+            default:
+                $response = "Unknown command: $command";
+                break;
         }
     }
 
