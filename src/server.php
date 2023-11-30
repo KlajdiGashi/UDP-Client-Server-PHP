@@ -30,15 +30,21 @@ while (true) {
 socket_close($socket);
 
 
-
+// funskioni kryesor per procesimin e kerkesave te klientit
 function processRequest($request, $adminPassword, &$clientData, &$clients)
 {
     $response = "Invalid command";
-    $requestParts = explode(" ", $request);
-    
-    if (isset($requestParts[0]) && isset($requestParts[1])) {
-        $command = $requestParts[0];
-        $password = $requestParts[1];
+    echo "Raw request: $request\n";
+
+    // ndarja e kerkesave ne 2 pjese 
+    $parts = explode(" ", $request);
+
+    // Marrja e komandes dhe password
+    $command = isset($parts[0]) ? $parts[0] : '';
+    $password = isset($parts[1]) ? $parts[1] : '';
+
+    // Marrja e pjeses tjeter te inputit
+    $content = implode(" ", array_slice($parts, 2));
 
         // perdorimii i switch case per kontrollimin e komandave
         switch ($command) {
