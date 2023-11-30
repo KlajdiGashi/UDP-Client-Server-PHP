@@ -14,6 +14,7 @@ echo "UDP Server listening on $serverHost:$serverPort\n";
 
 // Associative array to store client-specific data
    $clients = [];
+   $adminLoggedIn=true;  // New Variable to track admin login status
 while (true) {
     // Leximi i te dhenave nga klienti
     socket_recvfrom($socket, $buffer, 1024, 0, $clientAddress, $clientPort);
