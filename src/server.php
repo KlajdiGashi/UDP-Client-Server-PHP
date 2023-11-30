@@ -120,16 +120,28 @@ function processRequest($request, $adminPassword, &$clientData, &$clients)
                 }
                 break;
             
-                case '/listen':
-              
-                break;
-
-               case '/help':
-
-               break;
+               case '/listen':
+                    // Implement logic for the /listen command
+                    $response = "Listening for incoming data...";
+                    // You can add code here to handle incoming data or perform specific actions
+                    break;
+    
+                case '/help':
+                    // Provide help information for the /help command
+                    $response = "Available commands:\n";
+                    $response .= "/password <password> - Log in as administrator\n";
+                    $response .= "/write <password> <content> - Write content to file\n";
+                    $response .= "/read <password> - Read content from file\n";
+                    $response .= "/execute <password> - Delete the file (admin only)\n";
+                    $response .= "/listen - Start listening for incoming data\n";
+                    $response .= "/help - Display help information\n";
+                    break;
+    
+                default:
+                    $response = "Unknown command: $command";
+                    break;
+            }
         }
-    }
-
 
     return $response;
 }
