@@ -24,8 +24,10 @@ Socket programming is responsible for establishing that connection between appli
 
   * Protocol
        * User Datagram Protocol ([UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol)) is a network protocol that operates at the transport layer of the              Internet Protocol (IP) suite.
+      
        * How does UDP work ?
-         ![Alt text](/img/udp.PNG)
+
+            ![Alt text](/img/udp.PNG)
           
 
 ### Technologies
