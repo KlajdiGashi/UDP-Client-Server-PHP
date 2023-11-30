@@ -36,7 +36,6 @@ The implementation of the program was made using [PHP](https://www.php.net/) Ser
 
 - [Jeta Syla](https://github.com/Jeta-Syla)
 
-- [Klajdi Gashi](ht![udp](https://github.com/KlajdiGashi/Computers-Network/assets/118850687/e05a1be1-ff09-47cf-967f-0487530d7ed3)
-tps://github.com/KlajdiGashi)
+- [Klajdi Gashi](https://github.com/KlajdiGashi)
 
 - [Kleda Gashi](https://github.com/kledagashi)
