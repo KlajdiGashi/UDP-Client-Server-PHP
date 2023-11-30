@@ -43,30 +43,67 @@ function processRequest($request, $adminPassword, &$clientData, &$clients)
         // perdorimii i switch case per kontrollimin e komandave
         switch ($command) {
             case '/password':
-               
+               if ($password === $adminPassword) {
+                    $response = "Administrator login successful";
+                } else {
+                    $response = "Administrator login failed";
+                }
                 break;
 
             case '/write':
-                // Create write funciton
+
+            if (isset($requestParts[2]) && isset($requestParts[3])) {
+                    $fileName = 'output.txt';
+                    $fileContent = $requestParts[3];
+            
+                    if (file_put_contents($fileName, $fileContent, LOCK_EX) !== false) {
+                        $response = "File '$fileName' written successfully.";
+
+                        $clientData['writtenContent'] = $fileContent;
+                    } else {
+                        $response = "Failed to write to file '$fileName'.";
+                    }
+                } else {
+                    $response = "Invalid arguments for /write command.";
+                }
                 break;
             
             case '/read':
-                // Create read function
-               
+               // lexon kontekstin brenda file-it
+                $fileName = 'output.txt';
+
+                if (file_exists($fileName)) {
+                    $fileContent = file_get_contents($fileName);
+                    $response = "File content:\n$fileContent";
+                } else {
+                    $response = "File '$fileName' not found. Use '/write' to create and write to a file.";
+                }
                 break;
 
-            case '/listen':
-                // Create listen function
+            case 'execute':
+                // Kontrollon nese perdoruesi eshte administrator
+                if ($password === $adminPassword) {
+                    $fileName = 'output.txt';
+
+                    // Fshin file-n ekzistues
+                    if (file_exists($fileName)) {
+                        unlink($fileName);
+                        $response = "Execution privileges granted for administrators. File '$fileName' deleted.";
+                    } else {
+                        $response = "File '$fileName' not found.";
+                    }
+                } else {
+                    $response = "Invalid password for execute command.";
+                }
+                break;
+            
+                case '/listen':
               
                 break;
 
-            case '/execute':
-                // Create execute function
-                
-                break;
-            case '/help':
-                // Create help function 
-                break;
+               case '/help':
+
+               break;
         }
     }
 
