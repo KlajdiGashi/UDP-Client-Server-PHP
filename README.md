@@ -27,9 +27,7 @@ Socket programming is responsible for establishing that connection between appli
       
        * How does UDP work ?
 
-            ![Alt text](/img/udp.PNG)
-         
-            [^1] 
+            ![Alt text](/img/udp.PNG)  [^1] 
           
 
 ### Technologies
