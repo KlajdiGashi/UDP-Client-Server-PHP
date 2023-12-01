@@ -28,6 +28,7 @@ Socket programming is responsible for establishing that connection between appli
        * How does UDP work ?
 
             ![Alt text](/img/udp.PNG)
+            [^1] 
           
 
 ### Technologies
@@ -42,3 +43,6 @@ The implementation of the program was made using [PHP](https://www.php.net/) Ser
 - [Klajdi Gashi](https://github.com/KlajdiGashi)
 
 - [Kleda Gashi](https://github.com/kledagashi)
+
+### References
+[^1] (https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/)
