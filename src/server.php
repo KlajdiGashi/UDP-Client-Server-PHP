@@ -60,7 +60,6 @@ function processRequest($request, $adminPassword, &$clientData, &$loggedInUsers)
             case '/password':
                 // kontrollimi i password
                 if ($password === $adminPassword) {
-                    $loggedInUsers[] = $clientData['address']; // Save successfully logged-in user
                     $response = "Administrator login successful";
                 } else {
                     $response = "Administrator login failed";
@@ -120,11 +119,13 @@ function processRequest($request, $adminPassword, &$clientData, &$loggedInUsers)
                 }
                 break;
 
-            case '/listen':
-                // Implement logic for the /listen command
-                $response = "Listening for incoming data...";
-                // You can add code here to handle incoming data or perform specific actions
-                break;
+                case '/listen':
+                    // Return a list of connected clients
+                    $response = "Connected clients:\n";
+                    foreach ($clients as $clientAddress => $clientData) {
+                        $response .= "$clientAddress\n";
+                    }
+                    break;
 
             case '/help':
                 // Provide help information for the /help command
